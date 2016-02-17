@@ -5,6 +5,7 @@ using System.Text;
 using CsScripterLib.Functions;
 using CsScripterLib.Results;
 using CsScripterLib.SimpleOperations;
+using ResolverOverride = Microsoft.Practices.Unity.ResolverOverride;
 
 namespace CsScripterLib
 {
@@ -218,7 +219,7 @@ namespace CsScripterLib
 			if (simpleOperation == null)
 				return null;
 
-			return (ISimpleOperation)Activator.CreateInstance(simpleOperation.GetType());
+			return (ISimpleOperation)BootStrapper.UnityContainer.Resolve(simpleOperation.GetType(), "", new ResolverOverride[] { });
 		}
 
 		/// <summary>
