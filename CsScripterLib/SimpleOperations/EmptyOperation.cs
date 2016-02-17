@@ -1,6 +1,10 @@
-﻿namespace CsScripterLib.SimpleOperations
+﻿
+using CsScripterLib.Attributes;
+
+namespace CsScripterLib.SimpleOperations
 {
 	// Used for End of Line, end of Parens etc.
+	//[Operation(Constants.END_LINE)]
 	public class EmptyOperation : BaseOperation
 	{
 		public EmptyOperation()

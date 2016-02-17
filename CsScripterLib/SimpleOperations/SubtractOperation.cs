@@ -1,7 +1,9 @@
 ﻿using System.Globalization;
+using CsScripterLib.Attributes;
 
 namespace CsScripterLib.SimpleOperations
 {
+	[Operation(Constants.SUBTRACT)]
 	public class SubtractOperation : BaseOperation
 	{
 		public SubtractOperation()

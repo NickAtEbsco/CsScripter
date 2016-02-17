@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CsScripterLib.Functions;
+﻿using CsScripterLib.Functions;
 using CsScripterLib.Results;
 using CsScripterLib.SimpleOperations;
 

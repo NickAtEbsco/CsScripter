@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using CsScripterLib;
+using Microsoft.Practices.Unity;
 
 namespace CsScripter
 {
@@ -13,5 +9,13 @@ namespace CsScripter
 	/// </summary>
 	public partial class App : Application
 	{
+		protected override void OnStartup(StartupEventArgs e)
+		{
+			var unity = BootStrapper.UnityContainer;
+			unity.RegisterType<MainWindow, MainWindow>();
+
+			var mainWindow = unity.Resolve<MainWindow>();
+			mainWindow.Show();
+		}
 	}
 }

@@ -1,7 +1,9 @@
 ﻿using System;
+using CsScripterLib.Attributes;
 
 namespace CsScripterLib.SimpleOperations
 {
+	[Operation(Constants.DIVIDE)]
 	public class DivideOperator : BaseOperation
 	{
 		public DivideOperator()

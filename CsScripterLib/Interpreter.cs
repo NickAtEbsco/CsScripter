@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using CsScripterLib.Functions;
 using CsScripterLib.Results;
 using CsScripterLib.SimpleOperations;
@@ -24,14 +21,35 @@ namespace CsScripterLib
 
 		public void Initialize()
 		{
-			m_parser.AddSingleCommandFunctions(Constants.ADD, new AddOperation());
-			m_parser.AddSingleCommandFunctions(Constants.SUBTRACT, new SubtractOperation());
-			m_parser.AddSingleCommandFunctions(Constants.MULTIPLY, new MultiplyOperation());
-			m_parser.AddSingleCommandFunctions(Constants.DIVIDE, new DivideOperator());
-			m_parser.AddSingleCommandFunctions(Constants.END_LINE, new EmptyOperation());
+			try
+			{
+				//Fill the imports of this object
+				var init = BootStrapper.UnityContainer;
+				var exportedSimpleOps = init.ResolveAll(typeof(ISimpleOperation)).Cast<ISimpleOperation>();
 
-			m_parser.AddFunction(Constants.SET, new SetFunction(m_parser));
-			m_parser.AddFunction(Constants.PRINT, new PrintFunction(m_parser, this));
+				// ** Get all the exported Simple Operations
+				foreach( var simpleOp in exportedSimpleOps)
+				{
+					var exportedSymbol = simpleOp.GetExportedSymbol();
+
+					if (exportedSymbol.HasValue)
+						m_parser.AddSingleCommandFunctions(exportedSymbol.Value, simpleOp);
+				}
+
+				// ** Get all the exported Functions
+				var exportedFunctions = init.ResolveAll(typeof(IFunction)).Cast<IFunction>();
+				foreach (var function in exportedFunctions)
+				{
+					var exportedSymbol = function.GetExportedSymbol();
+
+					if (!string.IsNullOrEmpty(exportedSymbol))
+						m_parser.AddFunction(exportedSymbol, function);
+				}
+			}
+			catch (Exception ex)
+			{
+				AppendOutputLine("Error dynamically loading all the parts.\n" + ex);
+			}
 		}
 
 		public void Process(string script)

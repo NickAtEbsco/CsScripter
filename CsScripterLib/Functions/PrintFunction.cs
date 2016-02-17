@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
+using CsScripterLib.Attributes;
 using CsScripterLib.Results;
 
 namespace CsScripterLib.Functions
 {
+	[FunctionAttributes(Constants.PRINT)]
 	public class PrintFunction : IFunction
 	{
 		IParserFunction m_parserFunction;

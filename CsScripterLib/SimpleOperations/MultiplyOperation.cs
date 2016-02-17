@@ -1,5 +1,9 @@
-﻿namespace CsScripterLib.SimpleOperations
+﻿
+using CsScripterLib.Attributes;
+
+namespace CsScripterLib.SimpleOperations
 {
+	[Operation(Constants.MULTIPLY)]
 	public class MultiplyOperation : BaseOperation
 	{
 		public MultiplyOperation()

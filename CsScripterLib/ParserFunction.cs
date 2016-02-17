@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CsScripterLib.Functions;
 using CsScripterLib.Results;
 using CsScripterLib.SimpleOperations;
@@ -13,6 +11,7 @@ namespace CsScripterLib
 	public class ParserFunction : IParserFunction
 	{
 		Dictionary<string, IFunction> m_allFunctions = new Dictionary<string, IFunction>();
+
 		Dictionary<char, ISimpleOperation> m_singleCharCommands = new Dictionary<char, ISimpleOperation>();
 
 		public void AddFunction(string name, IFunction function)

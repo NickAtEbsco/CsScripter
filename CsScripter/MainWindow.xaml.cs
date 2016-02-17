@@ -21,10 +21,14 @@ namespace CsScripter
 		private bool m_runOnReturn = false;
 
 		private IInterpreter m_interpreter;
+		private IParserFunction m_parserFunction;
 
-		public MainWindow()
+		public MainWindow(IInterpreter theInterpreter, IParserFunction theParserFunction)
 		{
 			InitializeComponent();
+
+			m_interpreter = theInterpreter;
+			m_parserFunction = theParserFunction;
 
 			textSource.Focus();
 			m_baseTitle = this.Title + " - ";
@@ -35,10 +39,9 @@ namespace CsScripter
 			//textSource.Text = "; This is a comment\nset(text,\"Hello World\"\nprint(text)";
 			//textSource.Text = "; This is a comment\nprint(\"text)";
 			//textSource.Text = "; This is a comment\nset(sum,1+1)\nprint(sum)";
-			textSource.Text = "; This is a comment\nprint(3+10/2)";
+			textSource.Text = "; This is a comment\nprint(3+10/2-4)";
 
 			// Temporary for now.  Long term this would be IoC.
-			m_interpreter = new Interpreter(new ParserFunction());
 			m_interpreter.Initialize();
 		}
 

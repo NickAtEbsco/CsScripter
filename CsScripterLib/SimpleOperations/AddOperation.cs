@@ -1,5 +1,9 @@
-﻿namespace CsScripterLib.SimpleOperations
+﻿
+using CsScripterLib.Attributes;
+
+namespace CsScripterLib.SimpleOperations
 {
+	[Operation(Constants.ADD)]
 	public class AddOperation : BaseOperation
 	{
 		public AddOperation()
