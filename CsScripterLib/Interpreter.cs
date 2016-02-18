@@ -89,11 +89,18 @@ namespace CsScripterLib
 			bool inComments = false;
 
 			int lineNumber = 0;
+			int column = 0;
 			int parenthesis = 0;
+
+			char current = Constants.NULL_CHAR;
+			char previous = Constants.NULL_CHAR;
 
 			for (int i = 0; i < script.Length; i++)
 			{
-				var current = script[i];
+				column++;
+
+				previous = current;
+				current = script[i];
 
 				switch (current)
 				{
@@ -114,6 +121,7 @@ namespace CsScripterLib
 							return errorMsg;
 
 						lineNumber++;
+						column = 0;
 
 						if (inComments)
 						{
@@ -129,6 +137,10 @@ namespace CsScripterLib
 					case '\"':
 						if (!inComments)
 							inQuote = !inQuote;
+						break;
+					case Constants.TAB:
+						if (previous != Constants.NULL_CHAR && previous != Constants.END_LINE && previous != Constants.TAB)
+							return new ErrorResult(string.Format("Tabs aren't allowed in the middle of a statement.\nLine Number: {0}, Column: {1}", lineNumber, column));
 						break;
 				}
 

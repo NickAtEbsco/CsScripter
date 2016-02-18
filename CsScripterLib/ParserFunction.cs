@@ -41,11 +41,6 @@ namespace CsScripterLib
 				// Get the current character
 				current = data[currentPosition++];
 
-				// TODO: Move this into the initial parser
-				// test if there's a tab not in a row.  Tabs shouldn't be in the middle of the operation
-				if (!ValidateTabCorrectness(currentItem, current))
-					return new ErrorResult("Tabs cannot appear in the middle of a statement.");
-
 				// If this is the start of a quote, we want to grab everyhting in the quote without checking for if it matches a function
 				if (current == Constants.QUOTE && previous == Constants.NULL_CHAR)
 				{
