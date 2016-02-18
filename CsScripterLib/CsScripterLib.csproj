@@ -58,9 +58,7 @@
     <Compile Include="Attributes\FunctionAttributes.cs" />
     <Compile Include="Attributes\OperationAttribute.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Functions\VarFunction.cs" />
     <Compile Include="IVarManager.cs" />
-    <Compile Include="Results\VarResult.cs" />
     <Compile Include="SimpleOperations\AddOperation.cs" />
     <Compile Include="SimpleOperations\BaseOperation.cs" />
     <Compile Include="SimpleOperations\DivideOperator.cs" />
@@ -68,7 +66,6 @@
     <Compile Include="SimpleOperations\EqualsOperator.cs" />
     <Compile Include="SimpleOperations\ISimpleOperation.cs" />
     <Compile Include="Functions\PrintFunction.cs" />
-    <Compile Include="Functions\SetFunction.cs" />
     <Compile Include="Functions\IFunction.cs" />
     <Compile Include="IInterpreter.cs" />
     <Compile Include="Interpreter.cs" />

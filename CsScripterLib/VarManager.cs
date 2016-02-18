@@ -4,7 +4,7 @@ namespace CsScripterLib
 {
 	public class VarManager : IVarManager
 	{
-		Dictionary<string, object> m_variables = new Dictionary<string, object>(); 
+		readonly Dictionary<string, object> m_variables = new Dictionary<string, object>(); 
 
 		public void UpdateOrCreateVar(string name, double value, string str)
 		{
@@ -20,6 +20,11 @@ namespace CsScripterLib
 				return m_variables[name];
 
 			return null;
+		}
+
+		public void Clear()
+		{
+			m_variables.Clear();
 		}
 	}
 }

@@ -56,6 +56,9 @@ namespace CsScripterLib
 
 		public void Process(string script)
 		{
+			// Clean anything from before.
+			m_varManager.Clear();
+
 			m_outputString = new StringBuilder();
 
 			// Pre parse data to remove comments and other items here.
