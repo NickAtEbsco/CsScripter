@@ -6,7 +6,8 @@ namespace CsScripterLib.SimpleOperations
 	[Operation(Constants.DIVIDE)]
 	public class DivideOperator : BaseOperation
 	{
-		public DivideOperator()
+		public DivideOperator(IVarManager varManager)
+			: base(varManager)
 		{
 			Priority = 2;
 		}
@@ -20,7 +21,7 @@ namespace CsScripterLib.SimpleOperations
 				{
 					if (next.Value == 0.0)
 						throw new DivideByZeroException();
-					return new EmptyOperation(Value / next.Value);
+					return new EmptyOperation(Value / next.Value, m_varManager);
 				}
 				//else if (!string.IsNullOrWhiteSpace(String))
 				//	next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
@@ -33,7 +34,7 @@ namespace CsScripterLib.SimpleOperations
 			//		next.StoreString(String.Replace(next.String, ""));
 			//}
 
-			return new EmptyOperation();
+			return new EmptyOperation(m_varManager);
 		}
 	}
 }

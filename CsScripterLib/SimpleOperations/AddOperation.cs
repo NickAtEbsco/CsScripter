@@ -6,7 +6,8 @@ namespace CsScripterLib.SimpleOperations
 	[Operation(Constants.ADD)]
 	public class AddOperation : BaseOperation
 	{
-		public AddOperation()
+		public AddOperation(IVarManager varManager)
+			: base(varManager)
 		{
 			Priority = 1;
 		}
@@ -17,16 +18,16 @@ namespace CsScripterLib.SimpleOperations
 			if (!double.IsNaN(next.Value))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation(Value + next.Value);
+					return new EmptyOperation(Value + next.Value, m_varManager);
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String + next.Value);
+					return new EmptyOperation(String + next.Value, m_varManager);
 			}
 			else if (!string.IsNullOrEmpty(next.String))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation(Value + next.String);
+					return new EmptyOperation(Value + next.String, m_varManager);
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String + next.String);
+					return new EmptyOperation(String + next.String, m_varManager);
 			}
 
 			return base.Evaluate(next);

@@ -5,6 +5,7 @@ using System.Text;
 using CsScripterLib.Functions;
 using CsScripterLib.Results;
 using CsScripterLib.SimpleOperations;
+using Microsoft.Practices.Unity;
 using ResolverOverride = Microsoft.Practices.Unity.ResolverOverride;
 
 namespace CsScripterLib
@@ -33,11 +34,12 @@ namespace CsScripterLib
 			StringBuilder currentItem = new StringBuilder();
 			List<ISimpleOperation> simpleOperations = new List<ISimpleOperation>();
 			char previous = Constants.NULL_CHAR;
+			char current;
 
 			do
 			{
 				// Get the current character
-				char current = data[currentPosition++];
+				current = data[currentPosition++];
 
 				// TODO: Move this into the initial parser
 				// test if there's a tab not in a row.  Tabs shouldn't be in the middle of the operation
@@ -96,17 +98,18 @@ namespace CsScripterLib
 				}
 
 				// Test to see if its a string or value, because the Single Line Commands will need it if it is so.
-				var parseStrValRes = ParseStringOrValue(itemToParse);
-				if (parseStrValRes.IsError)
-					return parseStrValRes;
+				var parseStrRes = ParseString(itemToParse);
+				if (parseStrRes.IsError)
+					return parseStrRes;
 
 				// Check if its a single line cmd.
 				var singleLineCmd = GetNewSimpleOperation(current);
 
 				if (singleLineCmd != null)
 				{
-					singleLineCmd.StoreValue(parseStrValRes.Value);
-					singleLineCmd.StoreString(parseStrValRes.String);
+					singleLineCmd.StoreValue(parseStrRes.Value);
+					singleLineCmd.StoreString(parseStrRes.String);
+					singleLineCmd.StoreVariable(parseStrRes.VarName);
 
 					simpleOperations.Add(singleLineCmd);
 
@@ -118,15 +121,20 @@ namespace CsScripterLib
 				// This should be a variable, string, etc. but we'll check what it is later.
 				if (current == Constants.END_LINE || currentPosition == data.Length || to.Contains(current))
 				{
-					var empty = new EmptyOperation();
-					empty.StoreValue(parseStrValRes.Value);
-					empty.StoreString(parseStrValRes.String);
+					var empty = BootStrapper.UnityContainer.Resolve<EmptyOperation>();
+					empty.StoreValue(parseStrRes.Value);
+					empty.StoreString(parseStrRes.String);
+					empty.StoreVariable(parseStrRes.VarName);
 
 					simpleOperations.Add(empty);
+
+					// Reset this.
+					currentItem.Clear();
+					continue;
 				}
 
 				// See if it matches anything.
-			} while (currentPosition < data.Length);
+			} while (currentPosition < data.Length && !to.Contains(current));
 
 			// Now process all the Simple Operations if any exist
 			if (simpleOperations.Count > 0)
@@ -139,6 +147,16 @@ namespace CsScripterLib
 			}
 
 			return new Result();
+		}
+
+		public IDictionary<char, ISimpleOperation> SimpleOperations
+		{
+			get { return m_singleCharCommands; }
+		}
+
+		public IDictionary<string, IFunction> Functions
+		{
+			get { return m_allFunctions; }
 		}
 
 		bool KeepParsingLine(char current, char previous, char[] to)
@@ -156,22 +174,34 @@ namespace CsScripterLib
 			return true;
 		}
 
-		Result ParseStringOrValue(string parseItem)
+		Result ParseString(string parseItem)
 		{
+			if (parseItem[0] == Constants.VARIABLE)
+				return new Result(double.NaN, null, parseItem);
+
 			// Check if its a string.  
 			if (parseItem[0] == Constants.QUOTE && parseItem[parseItem.Length - 1] == Constants.QUOTE)
 				return new Result(Double.NaN, parseItem.Substring(1, parseItem.Length - 2));
 
 			// Check if its a number.
-			double parseNumber = double.NaN;
+			double parseNumber;
 			if (double.TryParse(parseItem, out parseNumber))
 				return new Result(parseNumber);
 
-			return new ErrorResult(string.Format("Unexpected string found: \'{0}\'.  Expected String or variable. "));
+			return new ErrorResult(string.Format("Unexpected string found: \'{0}\'.  Expected String or variable.", parseItem));
 		}
 
 		private ISimpleOperation Merge(ISimpleOperation current, ref int index, List<ISimpleOperation> simpleOperations, bool mergeOneOnly = false)
 		{
+			// If there's only 1 simple operation and its a variable, we want to return the value of the var instead of the text for it.
+			if (simpleOperations.Count == 1 && !string.IsNullOrEmpty(simpleOperations[0].VarName))
+			{
+				var empty = BootStrapper.UnityContainer.Resolve<EmptyOperation>();
+				empty.StoreValue(simpleOperations[0].Value);
+				empty.StoreString(simpleOperations[0].String);
+				return empty;
+			}
+
 			while( index < simpleOperations.Count)
 			{
 				ISimpleOperation next = simpleOperations[index++];
@@ -197,6 +227,10 @@ namespace CsScripterLib
 
 		private bool CanItemsMerge(ISimpleOperation current, ISimpleOperation next)
 		{
+			// Equals is a slightly different case.
+			if (current is EqualsOperator && next is EmptyOperation)
+				return true;
+
 			return current.Priority >= next.Priority;
 		}
 

@@ -14,6 +14,8 @@
 		public const string SET = "set";
 		public const string PRINT = "print";
 
+		public const char VARIABLE = ':';
+
 		// Line statements
 		public const char COMMENT = ';';
 		public const char START_ARG = '(';
@@ -28,5 +30,7 @@
 		public const char SUBTRACT = '-';
 		public const char MULTIPLY = '*';
 		public const char DIVIDE = '/';
+		public const char MODULUS = '%';
+		public const char EQUALS = '=';
 	}
 }

@@ -39,7 +39,9 @@ namespace CsScripter
 			//textSource.Text = "; This is a comment\nset(text,\"Hello World\"\nprint(text)";
 			//textSource.Text = "; This is a comment\nprint(\"text)";
 			//textSource.Text = "; This is a comment\nset(sum,1+1)\nprint(sum)";
-			textSource.Text = "; This is a comment\nprint(3+10/2-4)";
+
+			//textSource.Text = "; This is a comment\n:myVar=3+10/2-4\nprint(:myVar)";
+			textSource.Text = "; This is a comment\nprint(3+10/2-3)";
 
 			// Temporary for now.  Long term this would be IoC.
 			m_interpreter.Initialize();

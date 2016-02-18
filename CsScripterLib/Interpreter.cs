@@ -10,13 +10,15 @@ namespace CsScripterLib
 	public class Interpreter : IInterpreter
 	{
 		IParserFunction m_parser;
+		IVarManager m_varManager;
 		StringBuilder m_outputString;
 
 		int m_currentChar;
 
-		public Interpreter(IParserFunction parser)
+		public Interpreter(IParserFunction parser, IVarManager varManager)
 		{
 			m_parser = parser;
+			m_varManager = varManager;
 		}
 
 		public void Initialize()
@@ -74,6 +76,9 @@ namespace CsScripterLib
 			while (m_currentChar < cleanScript.Length)
 			{
 				var result = m_parser.ParseAndExecuteNextLine(cleanScript, ref m_currentChar, new[] { '\n' });
+
+				if (result.IsError)
+					return;
 			}
 		}
 

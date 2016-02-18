@@ -4,6 +4,7 @@
 	{
 		void StoreValue(double value);
 		void StoreString(string str);
+		void StoreVariable(string varName);
 
 		ISimpleOperation Evaluate(ISimpleOperation next);
 
@@ -13,5 +14,6 @@
 		int Priority { get; }
 		double Value { get; }
 		string String { get; }
+		string VarName { get; }
 	}
 }
