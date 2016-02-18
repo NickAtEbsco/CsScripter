@@ -18,16 +18,28 @@ namespace CsScripterLib.SimpleOperations
 			if (!double.IsNaN(next.Value))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation( Value - next.Value, m_varManager);
+				{
+					next.StoreValue(Value - next.Value);
+					return next;
+				}
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""), m_varManager);
+				{
+					next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
+					return next;
+				}
 			}
 			else if (!string.IsNullOrEmpty(next.String))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation(Value.ToString(CultureInfo.InvariantCulture).Replace(next.String, ""), m_varManager);
+				{
+					next.StoreString(Value.ToString(CultureInfo.InvariantCulture).Replace(next.String, ""));
+					return next;
+				}
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String.Replace(next.String, ""), m_varManager);
+				{
+					next.StoreString(String.Replace(next.String, ""));
+					return next;
+				}
 			}
 
 			return base.Evaluate(next);

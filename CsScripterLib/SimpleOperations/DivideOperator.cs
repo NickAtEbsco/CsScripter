@@ -21,7 +21,8 @@ namespace CsScripterLib.SimpleOperations
 				{
 					if (next.Value == 0.0)
 						throw new DivideByZeroException();
-					return new EmptyOperation(Value / next.Value, m_varManager);
+					next.StoreValue(Value / next.Value);
+					return next;
 				}
 				//else if (!string.IsNullOrWhiteSpace(String))
 				//	next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
@@ -34,7 +35,7 @@ namespace CsScripterLib.SimpleOperations
 			//		next.StoreString(String.Replace(next.String, ""));
 			//}
 
-			return new EmptyOperation(m_varManager);
+			return next;
 		}
 	}
 }

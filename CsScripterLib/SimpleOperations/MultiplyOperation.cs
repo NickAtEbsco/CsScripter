@@ -17,7 +17,10 @@ namespace CsScripterLib.SimpleOperations
 			if (!double.IsNaN(next.Value))
 			{
 				if (!double.IsNaN(Value))
-					 return new EmptyOperation(Value * next.Value, m_varManager);
+				{
+					next.StoreValue(Value * next.Value);
+					return next;
+				}
 				//else if (!string.IsNullOrWhiteSpace(String))
 				//	next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
 			}

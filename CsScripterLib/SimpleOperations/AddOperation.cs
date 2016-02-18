@@ -18,16 +18,28 @@ namespace CsScripterLib.SimpleOperations
 			if (!double.IsNaN(next.Value))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation(Value + next.Value, m_varManager);
+				{
+					next.StoreValue(Value + next.Value);
+					return next;
+				}
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String + next.Value, m_varManager);
+				{
+					next.StoreString(String + next.Value);
+					return next;
+				}
 			}
 			else if (!string.IsNullOrEmpty(next.String))
 			{
 				if (!double.IsNaN(Value))
-					return new EmptyOperation(Value + next.String, m_varManager);
+				{
+					next.StoreString(Value + next.String);
+					return next;
+				}
 				if (!string.IsNullOrWhiteSpace(String))
-					return new EmptyOperation(String + next.String, m_varManager);
+				{
+					next.StoreString(String + next.String);
+					return next;
+				}
 			}
 
 			return base.Evaluate(next);
