@@ -87,9 +87,9 @@ namespace CsScripterLib
 
 					// Do something with the result.
 
-
-					// Keep looking?
-					return fcnResult;
+					// Reset this.
+					currentItem.Clear();
+					continue;
 				}
 
 				// Test to see if its a string or value, because the Single Line Commands will need it if it is so.

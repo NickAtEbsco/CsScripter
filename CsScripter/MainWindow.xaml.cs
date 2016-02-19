@@ -41,6 +41,7 @@ namespace CsScripter
 			//textSource.Text = "; This is a comment\nset(sum,1+1)\nprint(sum)";
 
 			textSource.Text = "; Thi`s is a comment\n:myVar=3+10/2-3\nprint(:myVar)";
+			textSource.Text = "; Thi`s is a comment\n:myVar=3+10/2-3\nprint(:myVar)\nprint(3=3)\nprint(3=\"test\")\nprint(3=\"3\")";
 			//textSource.Text = "; This is a comment\nprint(3+10/2-3)";
 
 			// Temporary for now.  Long term this would be IoC.
