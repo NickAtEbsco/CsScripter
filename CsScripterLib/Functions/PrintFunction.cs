@@ -24,8 +24,10 @@ namespace CsScripterLib.Functions
 			if (result.IsError)
 				return result;
 
-			if (!double.IsNaN(result.Value))
-				m_interpreter.AppendOutputLine(result.Value.ToString(CultureInfo.InvariantCulture));
+			if (result.Value.HasValue)
+				m_interpreter.AppendOutputLine(result.Value.Value.ToString(CultureInfo.InvariantCulture));
+			else if (result.Boolean.HasValue)
+				m_interpreter.AppendOutputLine(result.Boolean.Value ? Constants.TRUE : Constants.FALSE);
 			else
 				m_interpreter.AppendOutputLine(result.String);
 

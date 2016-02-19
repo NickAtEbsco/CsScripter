@@ -102,8 +102,7 @@ namespace CsScripterLib
 
 				if (singleLineCmd != null)
 				{
-					singleLineCmd.StoreValue(parseStrRes.Value);
-					singleLineCmd.StoreString(parseStrRes.String);
+					singleLineCmd.StoreValue(parseStrRes.Object);
 					singleLineCmd.StoreVariable(parseStrRes.VarName);
 
 					simpleOperations.Add(singleLineCmd);
@@ -117,8 +116,7 @@ namespace CsScripterLib
 				if (current == Constants.END_LINE || currentPosition == data.Length || to.Contains(current))
 				{
 					var empty = BootStrapper.UnityContainer.Resolve<EmptyOperation>();
-					empty.StoreValue(parseStrRes.Value);
-					empty.StoreString(parseStrRes.String);
+					empty.StoreValue(parseStrRes.Object);
 					empty.StoreVariable(parseStrRes.VarName);
 
 					simpleOperations.Add(empty);
@@ -138,7 +136,7 @@ namespace CsScripterLib
 				int startIndex = 1;
 
 				var mergeResult = Merge(startCell, ref startIndex, simpleOperations);
-				return new Result(mergeResult.Value, mergeResult.String);
+				return new Result(mergeResult.Object);
 			}
 
 			return new Result();
@@ -172,11 +170,11 @@ namespace CsScripterLib
 		Result ParseString(string parseItem)
 		{
 			if (parseItem[0] == Constants.VARIABLE)
-				return new Result(double.NaN, null, parseItem);
+				return new Result(null, parseItem);
 
 			// Check if its a string.  
 			if (parseItem[0] == Constants.QUOTE && parseItem[parseItem.Length - 1] == Constants.QUOTE)
-				return new Result(Double.NaN, parseItem.Substring(1, parseItem.Length - 2));
+				return new Result(parseItem.Substring(1, parseItem.Length - 2));
 
 			// Check if its a number.
 			double parseNumber;
@@ -192,8 +190,7 @@ namespace CsScripterLib
 			if (simpleOperations.Count == 1 && !string.IsNullOrEmpty(simpleOperations[0].VarName))
 			{
 				var empty = BootStrapper.UnityContainer.Resolve<EmptyOperation>();
-				empty.StoreValue(simpleOperations[0].Value);
-				empty.StoreString(simpleOperations[0].String);
+				empty.StoreValue(simpleOperations[0].Object);
 				return empty;
 			}
 
@@ -248,7 +245,7 @@ namespace CsScripterLib
 			if (simpleOperation == null)
 				return null;
 
-			return (ISimpleOperation)BootStrapper.UnityContainer.Resolve(simpleOperation.GetType(), "", new ResolverOverride[] { });
+			return (ISimpleOperation)BootStrapper.UnityContainer.Resolve(simpleOperation.GetType(), "");
 		}
 
 		/// <summary>

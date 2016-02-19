@@ -15,18 +15,21 @@ namespace CsScripterLib.SimpleOperations
 		public override ISimpleOperation Evaluate(ISimpleOperation next)
 		{
 			// Compare against types.
-			if (!double.IsNaN(next.Value))
+			if (next.Value.HasValue)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					if (next.Value == 0.0)
+					if (next.Value.Value == 0.0)
 						throw new DivideByZeroException();
-					next.StoreValue(Value / next.Value);
+					next.StoreValue(Value.Value / next.Value.Value);
 					return next;
 				}
 				//else if (!string.IsNullOrWhiteSpace(String))
 				//	next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
 			}
+			else if(next.Boolean.HasValue)
+				throw new ArgumentException("Can't divide two booleans together.");
+				
 			//else if (!string.IsNullOrEmpty(next.String))
 			//{
 			//	if (!double.IsNaN(Value))

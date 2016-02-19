@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using CsScripterLib.Attributes;
 
 namespace CsScripterLib.SimpleOperations
@@ -16,10 +15,10 @@ namespace CsScripterLib.SimpleOperations
 		public override ISimpleOperation Evaluate(ISimpleOperation next)
 		{
 			// Its a variable name. Store it
-			if (double.IsNaN(Value) && string.IsNullOrEmpty(String) && !string.IsNullOrEmpty(VarName))
+			if (!Value.HasValue && String == null && !string.IsNullOrEmpty(VarName))
 			{
-				m_varManager.UpdateOrCreateVar(VarName, next.Value, next.String);
-				return new EmptyOperation(double.NaN, null, VarName, m_varManager);
+				m_varManager.UpdateOrCreateVar(VarName, next.Object);
+				return new EmptyOperation(null, VarName, m_varManager);
 			}
 
 			// If statement? Currently not implemented

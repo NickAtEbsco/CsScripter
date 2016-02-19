@@ -14,11 +14,11 @@ namespace CsScripterLib.SimpleOperations
 		public override ISimpleOperation Evaluate(ISimpleOperation next)
 		{
 			// Compare against types.
-			if (!double.IsNaN(next.Value))
+			if (next.Value.HasValue)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					next.StoreValue(Value * next.Value);
+					next.StoreValue(Value.Value * next.Value.Value);
 					return next;
 				}
 				//else if (!string.IsNullOrWhiteSpace(String))

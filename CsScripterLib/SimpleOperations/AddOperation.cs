@@ -1,4 +1,5 @@
 ﻿
+using System;
 using CsScripterLib.Attributes;
 
 namespace CsScripterLib.SimpleOperations
@@ -15,32 +16,39 @@ namespace CsScripterLib.SimpleOperations
 		public override ISimpleOperation Evaluate(ISimpleOperation next)
 		{
 			// Compare against types.
-			if (!double.IsNaN(next.Value))
+			if (next.Value.HasValue)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					next.StoreValue(Value + next.Value);
+					next.StoreValue(Value.Value + next.Value.Value);
 					return next;
 				}
-				if (!string.IsNullOrWhiteSpace(String))
+				if (String != null)
 				{
-					next.StoreString(String + next.Value);
+					next.StoreValue(String + next.Value.Value);
 					return next;
 				}
+				if (Boolean.HasValue)
+					throw new ArgumentException("Can't add two booleans together.");
+
 			}
-			else if (!string.IsNullOrEmpty(next.String))
+			else if (next.String != null)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					next.StoreString(Value + next.String);
+					next.StoreValue(Value.Value + next.String);
 					return next;
 				}
-				if (!string.IsNullOrWhiteSpace(String))
+				if (String != null)
 				{
-					next.StoreString(String + next.String);
+					next.StoreValue(String + next.String);
 					return next;
 				}
+				if (Boolean.HasValue)
+					throw new ArgumentException("Can't add two booleans together.");
 			}
+			else if (next.Boolean.HasValue)
+				throw new ArgumentException("Can't add two booleans together.");
 
 			return base.Evaluate(next);
 		}

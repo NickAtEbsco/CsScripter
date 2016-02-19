@@ -7,8 +7,8 @@
 	{
 		protected IVarManager m_varManager;
 		int m_iPriority;
-		double m_value;
-		string m_string;
+
+		object m_value;
 
 		protected BaseOperation(IVarManager varManager)
 		{
@@ -16,14 +16,19 @@
 			VarName = null;
 		}
 
-		public void StoreValue(double value)
+		public void StoreValue(object value)
 		{
-			Value = value;
-		}
+			var d = value as double?;
+			if (d != null)
+				Value = d;
 
-		public void StoreString(string str)
-		{
-			String = str;
+			var s = value as string;
+			if (s != null)
+				String = s;
+
+			var b = value as bool?;
+			if (b != null)
+				Boolean = b;
 		}
 
 		public void StoreVariable(string varName)
@@ -40,19 +45,15 @@
 
 		public int Priority { get { return m_iPriority; } protected set { m_iPriority = value; } }
 
-		public double Value
+		public double? Value
 		{
 			get
 			{
 				// If its a variable, we need to get the variable's value instead of the direct value
 				if (string.IsNullOrEmpty(VarName))
-					return m_value;
+					return m_value as double?;
 
-				var variable = m_varManager.GetVar(VarName);
-				if (variable is double)
-					return (double)variable;
-
-				return double.NaN;
+				return m_varManager.GetVar(VarName) as double?;
 			}
 			protected set
 			{
@@ -63,7 +64,7 @@
 					return;
 				}
 
-				m_varManager.UpdateOrCreateVar(VarName, value, null);
+				m_varManager.UpdateOrCreateVar(VarName, value);
 			}
 		}
 
@@ -71,26 +72,63 @@
 		{
 			get
 			{
-				// If its a variable, we need to get the variable's value instead.
 				if (string.IsNullOrEmpty(VarName))
-					return m_string;
+					return m_value as string;
 
-				var variable = m_varManager.GetVar(VarName);
-				if (variable is string)
-					return (string)variable;
-
-				return null;
+				return m_varManager.GetVar(VarName) as string;
 			}
 			protected set
 			{
 				// If its a variable, we need to get the variable's value instead.
 				if (string.IsNullOrEmpty(VarName))
 				{
-					m_string = value;
+					m_value = value;
 					return;
 				}
 
-				m_varManager.UpdateOrCreateVar(VarName, double.NaN, value);
+				m_varManager.UpdateOrCreateVar(VarName, value);
+			}
+		}
+
+		public bool? Boolean
+		{
+			get
+			{
+				if (string.IsNullOrEmpty(VarName))
+					return m_value as bool?;
+
+				return m_varManager.GetVar(VarName) as bool?;
+			}
+			protected set
+			{
+				// If its a variable, we need to get the variable's value instead.
+				if (string.IsNullOrEmpty(VarName))
+				{
+					m_value = value;
+					return;
+				}
+
+				m_varManager.UpdateOrCreateVar(VarName, value);
+			}
+		}
+
+		public object Object
+		{
+			get
+			{
+				var dbl = Value;
+				if (dbl.HasValue)
+					return dbl;
+
+				var str = String;
+				if (str != null)
+					return str;
+
+				var b = Boolean;
+				if (b.HasValue)
+					return b;
+
+				return null;
 			}
 		}
 

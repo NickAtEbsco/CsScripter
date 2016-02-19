@@ -155,7 +155,7 @@ namespace CsScripterLib
 			if (lastLineErrorMsg != null)
 				return lastLineErrorMsg;
 
-			return new Result(double.NaN, result.ToString());
+			return new Result(result.ToString());
 		}
 
 		Result CheckLineForErrorMessage(int parenthesis, bool inQuote, int lineNumber)

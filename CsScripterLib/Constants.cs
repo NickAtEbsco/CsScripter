@@ -32,5 +32,9 @@
 		public const char DIVIDE = '/';
 		public const char MODULUS = '%';
 		public const char EQUALS = '=';
+
+		// Boolean Values
+		public const string TRUE = "True";
+		public const string FALSE = "False";
 	}
 }

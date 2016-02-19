@@ -6,12 +6,9 @@ namespace CsScripterLib
 	{
 		readonly Dictionary<string, object> m_variables = new Dictionary<string, object>(); 
 
-		public void UpdateOrCreateVar(string name, double value, string str)
+		public void UpdateOrCreateVar(string name, object value)
 		{
-			if (double.IsNaN(value))
-				m_variables[name] = str;
-			else
-				m_variables[name] = value;
+			m_variables[name] = value;
 		}
 
 		public object GetVar(string name)

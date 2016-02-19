@@ -2,7 +2,7 @@
 {
 	public interface IVarManager
 	{
-		void UpdateOrCreateVar(string name, double value, string str);
+		void UpdateOrCreateVar(string name, object value);
 		object GetVar(string name);
 		void Clear();
 	}

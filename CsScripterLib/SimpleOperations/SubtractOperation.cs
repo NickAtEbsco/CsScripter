@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using CsScripterLib.Attributes;
 
 namespace CsScripterLib.SimpleOperations
@@ -15,32 +16,38 @@ namespace CsScripterLib.SimpleOperations
 		public override ISimpleOperation Evaluate(ISimpleOperation next)
 		{
 			// Compare against types.
-			if (!double.IsNaN(next.Value))
+			if (next.Value.HasValue)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					next.StoreValue(Value - next.Value);
+					next.StoreValue(Value.Value - next.Value.Value);
 					return next;
 				}
-				if (!string.IsNullOrWhiteSpace(String))
+				if (String != null)
 				{
-					next.StoreString(String.Replace(next.Value.ToString(CultureInfo.InvariantCulture), ""));
+					next.StoreValue(String.Replace(next.Value.Value.ToString(CultureInfo.InvariantCulture), ""));
 					return next;
 				}
+				if (Boolean.HasValue)
+					throw new ArgumentException("Can't subtract two booleans together.");
 			}
-			else if (!string.IsNullOrEmpty(next.String))
+			else if (next.String != null)
 			{
-				if (!double.IsNaN(Value))
+				if (Value.HasValue)
 				{
-					next.StoreString(Value.ToString(CultureInfo.InvariantCulture).Replace(next.String, ""));
+					next.StoreValue(Value.Value.ToString(CultureInfo.InvariantCulture).Replace(next.String, ""));
 					return next;
 				}
-				if (!string.IsNullOrWhiteSpace(String))
+				if (String != null)
 				{
-					next.StoreString(String.Replace(next.String, ""));
+					next.StoreValue(String.Replace(next.String, ""));
 					return next;
 				}
+				if (Boolean.HasValue)
+					throw new ArgumentException("Can't subtract two booleans together.");
 			}
+			else if (next.Boolean.HasValue)
+				throw new ArgumentException("Can't subtract two booleans together.");
 
 			return base.Evaluate(next);
 		}

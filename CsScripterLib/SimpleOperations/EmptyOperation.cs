@@ -13,33 +13,10 @@ namespace CsScripterLib.SimpleOperations
 			Priority = 0;
 		}
 
-		public EmptyOperation(string str, IVarManager varManager)
+		public EmptyOperation(object value, string varName, IVarManager varManager)
 			: base(varManager)
 		{
-			String = str;
-			Priority = 0;
-		}
-
-		public EmptyOperation(double value, IVarManager varManager)
-			: base(varManager)
-		{
-			Value = value;
-			Priority = 0;
-		}
-
-		public EmptyOperation(double value, string str, IVarManager varManager)
-			: base(varManager)
-		{
-			Value = value;
-			String = str;
-			Priority = 0;
-		}
-
-		public EmptyOperation(double value, string str, string varName, IVarManager varManager)
-			: base(varManager)
-		{
-			Value = value;
-			String = str;
+			StoreValue(value);
 			VarName = varName;
 			Priority = 0;
 		}

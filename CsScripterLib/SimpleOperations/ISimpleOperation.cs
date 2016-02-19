@@ -2,8 +2,7 @@
 {
 	public interface ISimpleOperation
 	{
-		void StoreValue(double value);
-		void StoreString(string str);
+		void StoreValue(object value);
 		void StoreVariable(string varName);
 
 		ISimpleOperation Evaluate(ISimpleOperation next);
@@ -12,8 +11,10 @@
 		/// Order of operations priority
 		/// </summary>
 		int Priority { get; }
-		double Value { get; }
+		double? Value { get; }
 		string String { get; }
+		bool? Boolean { get; }
+		object Object { get; }
 		string VarName { get; }
 	}
 }
